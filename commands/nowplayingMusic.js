@@ -1,3 +1,5 @@
+const distubehelper = require("../packages/distubeHelper");
+
 module.exports = {
   name: "nowplaying",
   description: "Display the current playing music",
@@ -5,12 +7,21 @@ module.exports = {
   async execute(message, client, Botfuncs) {
     const queue = client.distube.getQueue(message);
     if (!queue)
-      return message.channel.send(
-        `❌ | There is nothing in the queue right now!`
-      );
+      return Botfuncs.sendMessage(`❌ There is nothing in the queue right now`, message, false)
     const song = queue.songs[0];
     message.channel.send(
-      `▶ | I'm playing **\`${song.name}\`**, by ${song.user}`
+      {
+        embeds: [
+          distubehelper.buildEmbed(
+            `Now playing...`,
+            `**Song name**: \`${song.name}\`\nSong duration: \`${
+              song.formattedDuration
+            }\`\n${distubehelper.status(queue)}`,
+            `Requested by ${song.user.username}`,
+            "▶️"
+          ),
+        ],
+      }
     );
   },
 };

@@ -1,34 +1,54 @@
 const Discord = require("discord.js");
 
 module.exports = {
-  init(client) {
-    const status = (queue) =>
-      `Volume: \`${queue.volume}%\` | Loop: \`${
-        queue.repeatMode
-          ? queue.repeatMode === 2
-            ? "All Queue"
-            : "This Song"
-          : "Off"
-      }\``;
+  init(client, Botfuncs) {
     client.distube
-      .on("playSong", (queue, song) =>
-        queue.textChannel.send(
-          `▶ | Playing \`${song.name}\` - \`${
-            song.formattedDuration
-          }\`\nRequested by: ${song.user}\n${status(queue)}`
+      .on("playSong", (queue, song) => {
+        if (
+          Botfuncs.getServerProp(
+            queue.textChannel.guildId,
+            "distubeQLength"
+          ) !== queue.songs.length
         )
-      )
-      .on("addSong", (queue, song) =>
-        queue.textChannel.send(
-          `✅ | Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`
-        )
-      )
+          queue.textChannel.send({
+            embeds: [
+              buildEmbed(
+                `Now playing...`,
+                `**Song name**: \`${song.name}\`\nSong duration: \`${song.formattedDuration}\``,
+                `Requested by ${song.user.username}`,
+                "▶️"
+              ),
+            ],
+          });
+        Botfuncs.setServerProp(
+          queue.textChannel.guildId,
+          "distubeQLength",
+          queue.songs.length
+        );
+      })
+      .on("addSong", (queue, song) => {
+        queue.textChannel.send({
+          embeds: [
+            buildEmbed(
+              `Added song to queue`,
+              `**Song name**: \`${song.name}\`\nSong duration: \`${song.formattedDuration}\``,
+              `Requested by ${song.user.username}`,
+              "✅"
+            ),
+          ],
+        });
+      })
       .on("addList", (queue, playlist) =>
-        queue.textChannel.send(
-          `✅ | Added \`${playlist.name}\` playlist (${
-            playlist.songs.length
-          } songs) to queue\n${status(queue)}`
-        )
+        queue.textChannel.send({
+          embeds: [
+            buildEmbed(
+              `Added \`${playlist.name}\` to queue`,
+              `A total of ${playlist.songs.length} songs were added.`,
+              `Requested by ${playlist.user.username}`,
+              "✅"
+            ),
+          ],
+        })
       )
       .on("error", (channel, e) => {
         if (channel)
@@ -38,31 +58,50 @@ module.exports = {
         else console.error(e);
       })
       .on("empty", (channel) =>
-        channel.send("Voice channel is empty! Leaving the channel...")
-      )
-      .on("searchNoResult", (message, query) =>
-        message.channel.send(`💢 | No result found for \`${query}\`!`)
-      )
-      .on("finish", (queue) => queue.textChannel.send("Finished playing all songs"))
-      .on("searchResult", (message, result) => {
-        let i = 0;
-        message.channel.send(
-          `**Choose an option from below**\n${result
-            .map(
-              (song) =>
-                `**${++i}**. ${song.name} - \`${song.formattedDuration}\``
-            )
-            .join("\n")}\n*Enter anything else or wait 60 seconds to cancel*`
-        );
-      })
-      .on("searchCancel", (message) =>
-        message.channel.send(`💢 | Searching canceled`)
-      )
-      .on("searchInvalidAnswer", (message) =>
-        message.channel.send(
-          `💢 | Invalid answer! You have to enter the number in the range of the results`
+        Botfuncs.sendMessage(
+          "🖐 Voice channel is empty. Leaving...",
+          { channel },
+          false
         )
       )
-      .on("searchDone", () => {});
+      .on("searchNoResult", (message, query) =>
+        Botfuncs.sendMessage(
+          `💢 No result found for \`${query}\``,
+          message,
+          false
+        )
+      )
+      .on("finish", (queue) => {
+        Botfuncs.sendMessage("☑  Finished playing through queue", {
+          channel: queue.textChannel,
+        });
+        Botfuncs.setServerProp(
+          queue.textChannel.guildId,
+          "distubeQLength",
+          undefined
+        );
+      });
   },
+  buildEmbed,
+  status,
 };
+
+function buildEmbed(title, description, footer, emoji, image) {
+  return new Discord.EmbedBuilder()
+    .setTitle(title)
+    .setDescription(description)
+    .setFooter({ text: footer })
+    .setImage(image)
+    .setColor(Discord.resolveColor("Aqua"))
+    .setAuthor({ name: emoji });
+}
+
+function status(queue) {
+  return `Volume: \`${queue.volume}%\` | Loop: \`${
+    queue.repeatMode
+      ? queue.repeatMode === 2
+        ? "All Queue"
+        : "This Song"
+      : "Off"
+  }\``;
+}

@@ -5,10 +5,8 @@ module.exports = {
   async execute(message, client, Botfuncs) {
     const queue = client.distube.getQueue(message);
     if (!queue)
-      return message.channel.send(
-        `❌ | There is nothing in the queue right now!`
-      );
+      return Botfuncs.sendMessage("❌ There is nothing in the queue right now", message, false)
     queue.shuffle();
-    message.channel.send("Shuffled songs in the queue");
+    Botfuncs.sendMessage("🔀 Shuffled songs in the queue", message, false)
   },
 };

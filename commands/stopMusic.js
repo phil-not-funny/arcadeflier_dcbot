@@ -5,11 +5,22 @@ module.exports = {
   async execute(message, client, Botfuncs) {
     const queue = client.distube.getQueue(message);
     if (!queue)
-      return message.channel.send(
-        `❌ | There is nothing in the queue right now!`
+      return Botfuncs.sendMessage(
+        "❌ There is nothing in the queue right now",
+        message,
+        false
       );
     queue.stop();
     client.distube.voices.leave(message);
-    message.channel.send(`❌ | Stopped!`);
+    Botfuncs.setServerProp(
+      queue.textChannel.guildId,
+      "distubeQLength",
+      undefined
+    );
+    return Botfuncs.sendMessage(
+      "⏹  Stopped the music and left the channel",
+      message,
+      false
+    );
   },
 };

@@ -5,13 +5,21 @@ module.exports = {
   async execute(message, args, client, Botfuncs) {
     const queue = client.distube.getQueue(message);
     if (!queue)
-      return message.channel.send(
-        `❌ | There is nothing in the queue right now!`
+      return Botfuncs.sendMessage(
+        "❌ There is nothing in the queue right now",
+        message,
+        false
       );
     const volume = parseInt(args[0]);
     if (isNaN(volume))
-      return message.channel.send(`❌ | Please enter a valid number!`);
+      return Botfuncs.sendMessage(
+        `❌ ${args[0]} is not a valid number`,
+        message,
+        false
+      );
     queue.setVolume(volume);
-    message.channel.send(`✅ | Volume set to \`${volume}\``);
+    Botfuncs.sendMessage(
+      `${volume > 100 ? "🔊" : "🔉"} Volume set to \`${volume}\``, message, false
+    );
   },
 };

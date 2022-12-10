@@ -28,9 +28,6 @@ client.distube = new DisTube(client, {
   emitAddListWhenCreatingQueue: false,
 });
 
-
-distubehelper.init(client);
-
 const serversFile = "./servers.json";
 const configFile = "./config.json";
 const commandDir = module.path + "/commands";
@@ -48,6 +45,8 @@ client.once("ready", async () => {
   Botfuncs.validateServers();
   Botfuncs.setGlobalCommandDir(commandDir);
   Botfuncs.putGlobalCommandsToAPI(client.user.id, rest);
+
+  distubehelper.init(client, Botfuncs);
 
   console.log("Gamebot is now ready");
   const date1 = new Date();

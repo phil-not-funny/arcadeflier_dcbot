@@ -112,22 +112,31 @@ function buildMusicEmbed(prefix) {
         name: prefix + "play",
         value: "Plays a song",
         inline: true,
-      },{
+      },
+      {
         name: prefix + "skip",
         value: "Skips the current song",
         inline: true,
-      },{
+      },
+      {
         name: prefix + "queue",
         value: "Shows the current queue",
         inline: true,
-      },{
+      },
+      {
         name: prefix + "shuffle",
         value: "Shuffles the current queue",
         inline: true,
-      },{
+      },
+      {
         name: prefix + "stop",
         value: "Stops playing music",
         inline: true,
       },
+      {
+        name: prefix + "volume",
+        value: "Changes the musics volume",
+        inline: true,
+      }
     );
 }
