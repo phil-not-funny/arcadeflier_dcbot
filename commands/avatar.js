@@ -29,7 +29,7 @@ module.exports = {
       message
     );
   },
-  interact(interaction, options, author) {
+  interact(interaction, options, author, guildId, client, Botfuncs, prefix) {
     if (!options.get("target")) {
       return sendMsg(
         `🖼️  Your avatar:`,

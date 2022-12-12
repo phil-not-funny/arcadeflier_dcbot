@@ -5,7 +5,7 @@ module.exports = {
   execute(message, prefix) {
     message.reply({ embeds: [buildEmbed(prefix)] });
   },
-  interact(interaction, prefix) {
+  interact(interaction, options, author, guildId, client, Botfuncs, prefix) {
     interaction.reply({ embeds: [buildEmbed(prefix)], ephemeral: true });
   },
 };

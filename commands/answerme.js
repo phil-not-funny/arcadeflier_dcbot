@@ -33,7 +33,7 @@ module.exports = {
   /**
    * @param {Discord.ChatInputCommandInteraction} interaction
    */
-  interact(interaction, args, author) {
+  interact(interaction, args, author, guildId, client, Botfuncs, prefix) {
     const answer = genRandom();
     content = args.get("question").value;
     interaction.reply(`I am answering "**${content}**" .`);

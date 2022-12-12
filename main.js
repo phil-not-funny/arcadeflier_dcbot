@@ -145,64 +145,19 @@ client.on("interactionCreate", (interaction) => {
         !Botfuncs.getServerProp(guildId, "botchannel") ||
         Botfuncs.getServerProp(guildId, "botchannel") == interaction.channel.id
       ) {
-        if (command === "play") {
-          return Botfuncs.execInteractionCommand(
-            "playMusic",
-            guildId,
-            interaction,
-            options,
-            guildId,
-            client,
-            Botfuncs
-          );
-        } else if (command === "hello")
-          return Botfuncs.execInteractionCommand(
-            "hello",
-            guildId,
-            interaction,
-            client
-          );
-        if (command === "help")
-          return Botfuncs.execInteractionCommand(
-            "help",
-            guildId,
-            interaction,
-            Botfuncs.getServerProp(guildId, "prefix")
-          );
-        else if (command === "serverproperties")
-          return Botfuncs.execInteractionCommand(
-            "serverProperties",
-            guildId,
-            interaction,
-            options,
-            guildId,
-            Botfuncs
-          );
-        else if (command === "answerme")
-          return Botfuncs.execInteractionCommand(
-            "answerme",
-            guildId,
-            interaction,
-            options,
-            author
-          );
-        else if (command === "usage")
-          return Botfuncs.execInteractionCommand(
-            "usage",
-            guildId,
-            interaction,
-            Botfuncs.getServerProp(guildId, "prefix")
-          );
-        else if (command === "timer")
-          return Botfuncs.execInteractionCommand(
-            "timer",
-            guildId,
-            interaction,
-            options,
-            author
-          );
+        return Botfuncs.execInteractionCommand(
+          command,
+          guildId,
+          interaction,
+          options,
+          author,
+          guildId,
+          client,
+          Botfuncs,
+          Botfuncs.getServerProp(guildId, "prefix")
+        );
       }
-      if (command == "clear") {
+      if (command == "clear")
         return Botfuncs.execInteractionCommand(
           "clear",
           guildId,
@@ -210,24 +165,6 @@ client.on("interactionCreate", (interaction) => {
           options,
           guildMember,
           Botfuncs
-        );
-      } else if (command === "meme")
-        return Botfuncs.execInteractionCommand("meme", guildId, interaction);
-      else if (command === "avatar")
-        return Botfuncs.execInteractionCommand(
-          "avatar",
-          guildId,
-          interaction,
-          options,
-          author
-        );
-      else if (command === "uinfo")
-        return Botfuncs.execInteractionCommand(
-          "uinfo",
-          guildId,
-          interaction,
-          options,
-          author
         );
       else if (
         !(

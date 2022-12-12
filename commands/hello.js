@@ -5,7 +5,7 @@ module.exports = {
   /**
    * @param {Discord.ChatInputCommandInteraction} interaction
    */
-  interact(interaction, client) {
+  interact(interaction, options, author, guildId, client, Botfuncs, prefix) {
     const botLatency = Math.floor(Math.random() * 50) + 20;
     const embed = new Discord.EmbedBuilder()
       .setTitle("Hello")

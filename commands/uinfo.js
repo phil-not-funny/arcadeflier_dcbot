@@ -22,7 +22,7 @@ module.exports = {
     }
     sendEmbed(user, guildUser, author, message);
   },
-  interact(interaction, options, author) {
+  interact(interaction, options, author, guildId, client, Botfuncs, prefix) {
     let user;
     let guildUser;
     if (!options.get("target")) {

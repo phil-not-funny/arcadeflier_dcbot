@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const BotfuncsType = require("dcjs-botfuncs");
 module.exports = {
-  name: "serverProperties",
+  name: "serverproperties",
   description: "Modifies the server properties/Lists up all properties",
   args: [
     {
@@ -68,7 +68,7 @@ module.exports = {
   /**
    * @param {BotfuncsType} Botfuncs
    */
-  interact(interaction, args, guildId, Botfuncs) {
+  interact(interaction, args, author, guildId, client, Botfuncs, prefix) {
     if (
       !interaction.member.permissions.has(
         Discord.PermissionFlagsBits.Administrator

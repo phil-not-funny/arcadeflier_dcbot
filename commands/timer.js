@@ -69,7 +69,7 @@ module.exports = {
     timer();
     console.log(`started a timer on server ${message.guild.id}`);
   },
-  interact(interaction, options, author) {
+  interact(interaction, options, author, guildId, client, Botfuncs, prefix) {
     var withtext = true;
     var target = options.getInteger("seconds");
     var text = options.getString("note");

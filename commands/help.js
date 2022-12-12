@@ -19,7 +19,7 @@ module.exports = {
       Botfuncs.sendMessage(`❌ ${args[0]} is an unknown help type`);
     }
   },
-  interact(interaction, prefix) {
+  interact(interaction, options, author, guildId, client, Botfuncs, prefix) {
     const helpOption = interaction.options.getString("type");
     if (!helpOption)
       interaction.reply({ embeds: [buildEmbed(prefix)], ephemeral: true });

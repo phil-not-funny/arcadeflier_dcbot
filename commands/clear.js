@@ -76,7 +76,7 @@ module.exports = {
   /**
    * @param {BotfuncsType} Botfuncs
    */
-  async interact(interaction, args, author, Botfuncs) {
+  async interact(interaction, args, author, guildId, client, Botfuncs, prefix) {
     let arg = args.get("amount_or_temp").value;
     if (isNaN(arg) && arg !== "temp")
       return Botfuncs.sendInteractReply(
