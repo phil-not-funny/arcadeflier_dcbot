@@ -1,7 +1,14 @@
 module.exports = {
   name: "volume",
-  description: "Changes the volume in percentage",
-  private: true,
+  description: "Changes the musics volume in percentage",
+  args: [
+    {
+      name: "percentage",
+      description: "volume in percentage",
+      reqired: true,
+      type: 4,
+    },
+  ],
   async execute(message, args, client, Botfuncs) {
     const queue = client.distube.getQueue(message);
     if (!queue)
@@ -19,7 +26,25 @@ module.exports = {
       );
     queue.setVolume(volume);
     Botfuncs.sendMessage(
-      `${volume > 100 ? "🔊" : "🔉"} Volume set to \`${volume}\``, message, false
+      `${volume > 100 ? "🔊" : "🔉"} Volume set to \`${volume}\``,
+      message,
+      false
+    );
+  },
+  async interact(interaction, options, author, guildId, client, Botfuncs) {
+    const queue = client.distube.getQueue(interaction);
+    if (!queue)
+      return Botfuncs.sendInteractReply(
+        "❌ There is nothing in the queue right now",
+        interaction,
+        true,
+        true
+      );
+    const volume = options.get("percentage").value;
+    queue.setVolume(volume);
+    Botfuncs.sendInteractReply(
+      `${volume > 100 ? "🔊" : "🔉"} Volume set to \`${volume}\``,
+      interaction
     );
   },
 };

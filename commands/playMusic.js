@@ -4,7 +4,6 @@ const BotfuncsType = require("dcjs-botfuncs");
 module.exports = {
   name: "play",
   description: "Plays some funky beats",
-  private: true,
   args: [{ name: "query", description: "Search query or URL", required: true }],
   /**
    *
@@ -25,7 +24,10 @@ module.exports = {
         message
       );
     const query = args.join(" ");
-    if (query.toLowerCase().includes("https://") && !query.toLowerCase().includes("youtube"))
+    if (
+      query.toLowerCase().includes("https://") &&
+      !query.toLowerCase().includes("youtube")
+    )
       return Botfuncs.sendMessage(
         "💢  Unsupported provider",
         message,
@@ -47,9 +49,32 @@ module.exports = {
    * @param {Discord.Client} client
    * @param {BotfuncsType} Botfuncs
    */
-  interact(interaction, options, guildId, client, Botfuncs) {
-    //const query = options.get("query").value;
-    //const author = interaction.member;
-    //client.distube.play(author.voice.channel, query, { member: author, textChannel: interaction.channel})
+  interact(interaction, options, author2, guildId, client, Botfuncs) {
+    const query = options.get("query").value;
+    const author = interaction.member;
+    if (!author.voice.channel)
+      return Botfuncs.sendInteractReply(
+        "⛔  You must be in a channel to use that command",
+        interaction,
+        true,
+        true
+      );
+    if (
+      query.toLowerCase().includes("https://") &&
+      !query.toLowerCase().includes("youtube")
+    )
+      return Botfuncs.sendInteractReply(
+        "💢  Unsupported provider",
+        interaction,
+        true,
+        true
+      );
+
+    client.distube.play(author.voice.channel, query, {
+      member: author,
+      textChannel: interaction.channel,
+      message: interaction.channel.messages.cache.last(),
+    });
+    Botfuncs.sendInteractReply("✅", interaction, true, true);
   },
 };

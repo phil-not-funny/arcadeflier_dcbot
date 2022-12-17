@@ -2,8 +2,7 @@ const Discord = require("discord.js");
 
 module.exports = {
   name: "queue",
-  description: "Shows you the queue",
-  private: true,
+  description: "Shows the current queue",
   async execute(message, args, client, Botfuncs) {
     const queue = client.distube.getQueue(message);
     if (!queue)
@@ -15,6 +14,17 @@ module.exports = {
 
     message.channel.send({ embeds: [buildEmbed(queue.songs[0], queue.songs)] });
   },
+  interact(interaction, options, author2, guildId, client, Botfuncs) {
+    const queue = client.distube.getQueue(interaction);
+    if (!queue)
+      return Botfuncs.sendInteractReply(
+        `❌ There is nothing in the queue right now`,
+        interaction,
+        true, true
+      );
+
+    interaction.reply({ embeds: [buildEmbed(queue.songs[0], queue.songs)] });
+  }
 };
 
 function buildEmbed(active, songs) {

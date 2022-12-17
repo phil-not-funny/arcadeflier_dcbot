@@ -2,8 +2,7 @@ const Discord = require("discord.js");
 
 module.exports = {
   name: "skip",
-  description: "Skip a song",
-  private: true,
+  description: "Skips the current song",
   async execute(message, client, Botfuncs) {
     const queue = client.distube.getQueue(message);
     if (!queue)
@@ -33,6 +32,38 @@ module.exports = {
       });
     } catch (e) {
       Botfuncs.sendMessage(`❌ ${e}`, message, false);
+    }
+  },
+  async interact(interaction, options, author, guildId, client, Botfuncs) {
+    const queue = client.distube.getQueue(interaction);
+    if (!queue)
+      return Botfuncs.sendInteractReply(
+        `❌ There is nothing in the queue right now`,
+        interaction,
+        true,
+        true
+      );
+    try {
+      Botfuncs.setServerProp(
+        guildId,
+        "distubeQLength",
+        queue.songs.length - 1
+      );
+      const song = await queue.skip();
+
+      interaction.reply({
+        embeds: [
+          new Discord.EmbedBuilder()
+            .setTitle("Skipped current song")
+            .setDescription(
+              `Now playing: **${song.name}** - \`${song.formattedDuration}\``
+            )
+            .setColor(Discord.resolveColor("DarkBlue"))
+            .setFooter({ text: `Requested by ${author.username}` }),
+        ],
+      });
+    } catch (e) {
+      Botfuncs.sendInteractReply(`❌ ${e}`, interaction, true);
     }
   },
 };

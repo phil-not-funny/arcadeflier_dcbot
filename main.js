@@ -348,7 +348,7 @@ client.on("messageCreate", (message) => {
               client,
               Botfuncs
             );
-          } else if (command === "shuffle") {
+          } else if (command === "shuffle" || command === "sh") {
             return Botfuncs.execCommand(
               "shuffle",
               guildId,
