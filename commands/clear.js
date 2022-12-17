@@ -76,7 +76,15 @@ module.exports = {
   /**
    * @param {BotfuncsType} Botfuncs
    */
-  async interact(interaction, args, author, guildId, client, Botfuncs, prefix) {
+  async interact(
+    interaction,
+    args,
+    author2,
+    guildId,
+    client,
+    Botfuncs,
+    prefix
+  ) {
     let arg = args.get("amount_or_temp").value;
     if (isNaN(arg) && arg !== "temp")
       return Botfuncs.sendInteractReply(
@@ -97,6 +105,7 @@ module.exports = {
         ".\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n."
       );
     }
+    const author = interaction.member;
     if (
       !author.permissions.has(Discord.PermissionFlagsBits.Administrator) ||
       !author.permissions.has(Discord.PermissionFlagsBits.ManageMessages)

@@ -56,7 +56,7 @@ client.once("ready", async () => {
     type: Discord.ActivityType.Playing,
     name: "/help | " + Botfuncs.getBotConfig("prefix") + "help",
   });
-  client.user.setUsername("Arcade.Flyer");
+  //client.user.setUsername("Arcade.Flyer");
 
   countryGames.load();
 
@@ -370,6 +370,15 @@ client.on("messageCreate", (message) => {
               "nowplaying",
               guildId,
               message,
+              client,
+              Botfuncs
+            );
+          } else if (command === "loop") {
+            return Botfuncs.execCommand(
+              "loop",
+              guildId,
+              message,
+              args,
               client,
               Botfuncs
             );

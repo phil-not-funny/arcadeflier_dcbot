@@ -14,7 +14,7 @@ module.exports = {
 
     message.channel.send({ embeds: [buildEmbed(queue.songs[0], queue.songs)] });
   },
-  interact(interaction, options, author2, guildId, client, Botfuncs) {
+  interact(interaction, options, author, guildId, client, Botfuncs) {
     const queue = client.distube.getQueue(interaction);
     if (!queue)
       return Botfuncs.sendInteractReply(

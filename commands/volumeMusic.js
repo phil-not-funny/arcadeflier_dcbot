@@ -5,7 +5,7 @@ module.exports = {
     {
       name: "percentage",
       description: "volume in percentage",
-      reqired: true,
+      required: true,
       type: 4,
     },
   ],

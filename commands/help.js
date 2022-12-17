@@ -100,7 +100,7 @@ function buildMusicEmbed(prefix) {
     .setColor("#b9d918")
     .setTitle("Music Commands")
     .setDescription(
-      "~~Also available as slash commands~~\nThe serverwide prefix is: **" +
+      "**Also available as slash commands**\nThe serverwide prefix is: **" +
         prefix +
         "**"
     )
@@ -109,33 +109,43 @@ function buildMusicEmbed(prefix) {
       //{ name: prefix + 'stop', value: 'stops any ongoing game', inline: true },
 
       {
-        name: prefix + "play",
+        name: prefix + "play\n`/play`",
         value: "Plays a song",
         inline: true,
       },
       {
-        name: prefix + "skip",
+        name: prefix + "skip\n`/skip`",
         value: "Skips the current song",
         inline: true,
       },
       {
-        name: prefix + "queue",
+        name: prefix + "queue\n`/queue`",
         value: "Shows the current queue",
         inline: true,
       },
       {
-        name: prefix + "shuffle",
+        name: prefix + "shuffle\n`/shuffle`",
         value: "Shuffles the current queue",
         inline: true,
       },
       {
-        name: prefix + "stop",
+        name: prefix + "stop\n`/stop`",
         value: "Stops playing music",
         inline: true,
       },
       {
-        name: prefix + "volume",
+        name: prefix + "volume\n`/volume`",
         value: "Changes the musics volume",
+        inline: true,
+      },
+      {
+        name: prefix + "np\n`/nowplaying`",
+        value: "Display the currently playing music",
+        inline: true,
+      },
+      {
+        name: prefix + "loop\n`/loop`",
+        value: "Repeats the current song/queue",
         inline: true,
       }
     );
