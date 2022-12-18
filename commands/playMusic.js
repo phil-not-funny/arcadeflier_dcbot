@@ -41,6 +41,7 @@ module.exports = {
       textChannel: message.channel,
       message,
     });
+    Botfuncs.sendMessage("✅ Added song(s) to queue", message, false)
   },
   /**
    * @param {Discord.ChatInputCommandInteraction} interaction
@@ -75,6 +76,6 @@ module.exports = {
       textChannel: interaction.channel,
       message: interaction.channel.messages.cache.last(),
     });
-    Botfuncs.sendInteractReply("✅", interaction, true, true);
+    Botfuncs.sendInteractReply("✅ Added song(s) to queue", interaction);
   },
 };
