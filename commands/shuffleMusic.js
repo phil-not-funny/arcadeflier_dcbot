@@ -2,6 +2,11 @@ module.exports = {
   name: "shuffle",
   description: "Shuffles the active queue",
   async execute(message, client, Botfuncs) {
+    if (!message.member.voice.channel)
+      return Botfuncs.sendMessage(
+        "⛔  You must be in a channel to use that command",
+        message
+      );
     const queue = client.distube.getQueue(message);
     if (!queue)
       return Botfuncs.sendMessage(
@@ -13,6 +18,11 @@ module.exports = {
     Botfuncs.sendMessage("🔀 Shuffled songs in the queue", message, false);
   },
   async interact(interaction, options, author, guildId, client, Botfuncs) {
+    if (!interaction.member.voice.channel)
+      return Botfuncs.sendMessage(
+        "⛔  You must be in a channel to use that command",
+        message
+      );
     const queue = client.distube.getQueue(interaction);
     if (!queue)
       return Botfuncs.sendInteractReply(

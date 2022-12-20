@@ -10,6 +10,11 @@ module.exports = {
     },
   ],
   async execute(message, args, client, Botfuncs) {
+    if (!message.member.voice.channel)
+      return Botfuncs.sendMessage(
+        "⛔  You must be in a channel to use that command",
+        message
+      );
     const queue = client.distube.getQueue(message);
     if (!queue)
       return Botfuncs.sendMessage(
@@ -32,6 +37,11 @@ module.exports = {
     );
   },
   async interact(interaction, options, author, guildId, client, Botfuncs) {
+    if (!interaction.member.voice.channel)
+      return Botfuncs.sendMessage(
+        "⛔  You must be in a channel to use that command",
+        message
+      );
     const queue = client.distube.getQueue(interaction);
     if (!queue)
       return Botfuncs.sendInteractReply(
