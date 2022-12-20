@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const BotfuncsType = require("dcjs-botfuncs");
+const distubeHelper = require("../packages/distubeHelper");
 
 module.exports = {
   name: "play",
@@ -41,7 +42,6 @@ module.exports = {
       textChannel: message.channel,
       message,
     });
-    Botfuncs.sendMessage("✅ Added song(s) to queue", message, false)
   },
   /**
    * @param {Discord.ChatInputCommandInteraction} interaction
