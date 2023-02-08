@@ -4,6 +4,7 @@ const { REST } = require("@discordjs/rest");
 const GatewayIntentBits = Discord.GatewayIntentBits;
 const fs = require("fs");
 const BotfuncsType = require("dcjs-botfuncs");
+const { Configuration, OpenAIApi } = require("openai");
 
 /* ------------------------------- Set config ------------------------------- */
 const Botfuncs = new BotfuncsType();
@@ -39,6 +40,15 @@ const rest = new REST({ version: 10 }).setToken(Botfuncs.getBotConfig("token"));
 
 const countryGames = require("./games/country-game.js");
 let debugging = Botfuncs.getBotConfig("debug");
+
+let openaiConfig;
+let openai;
+if(Botfuncs.getBotConfig("openaiKey")) {
+  openaiConfig = new Configuration({
+    apiKey: Botfuncs.getBotConfig("openaiKey"),
+  });
+  openai = new OpenAIApi(openaiConfig);
+}
 
 /* -------------------------------- On ready -------------------------------- */
 client.once("ready", async () => {
@@ -145,7 +155,9 @@ client.on("interactionCreate", (interaction) => {
         !Botfuncs.getServerProp(guildId, "botchannel") ||
         Botfuncs.getServerProp(guildId, "botchannel") == interaction.channel.id
       ) {
-        return Botfuncs.execInteractionCommand(
+        if(command === "openai")
+        return Botfuncs.execInteractionCommand(command, guildId, interaction, options, author, guildId, client, Botfuncs, openai);
+        else return Botfuncs.execInteractionCommand(
           command,
           guildId,
           interaction,
