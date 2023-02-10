@@ -30,32 +30,44 @@ module.exports = {
     openai
   ) {
     interaction.reply("OpenAI is thinking");
-    if (options.get("service").value === "chat") {
-      const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: options.get("prompt").value,
-        temperature: 0.7,
-        max_tokens: 256,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
-      });
-      const answer = response.data.choices[0].text;
+    try {
+      if (options.get("service").value === "chat") {
+        const response = await openai.createCompletion({
+          model: "text-davinci-003",
+          prompt: options.get("prompt").value,
+          temperature: 0.7,
+          max_tokens: 256,
+          top_p: 1,
+          frequency_penalty: 0,
+          presence_penalty: 0,
+        });
+        const answer = response.data.choices[0].text;
+        interaction.editReply({
+          content: null,
+          embeds: [buildEmbedChat(options.get("prompt").value, answer)],
+        });
+      } else if (options.get("service").value === "image") {
+        const response = await openai.createImage({
+          prompt: options.get("prompt").value,
+          n: 1,
+          size: "1024x1024",
+        });
+        const image = response.data.data[0].url;
+        interaction.editReply({
+          content: null,
+          embeds: [buildEmbedImg(options.get("prompt").value, image)],
+        });
+      }
+    } catch (err) {
       interaction.editReply({
         content: null,
-        embeds: [buildEmbedChat(options.get("prompt").value, answer)],
+        embeds: [
+          new Discord.EmbedBuilder().setTitle(
+            `💢 The AI responded with a code of ${err.response.status || "400"}`
+          ),
+        ],
       });
-    } else if (options.get("service").value === "image") {
-      const response = await openai.createImage({
-        prompt: options.get("prompt").value,
-        n: 1,
-        size: "1024x1024",
-      });
-      const image = response.data.data[0].url;
-      interaction.editReply({
-        content: null,
-        embeds: [buildEmbedImg(options.get("prompt").value, image)],
-      });
+      console.log(err.message);
     }
   },
 };
@@ -66,11 +78,8 @@ function buildEmbedChat(prompt, answer) {
     .setDescription(`**Returned:**${answer}`)
     .setFooter({
       text: "Provided by OpenAI",
-      iconURL: "https://www.openai.com",
-    })
-    .setThumbnail(
-      "https://openai.com/content/images/2022/05/openai-avatar.png"
-    );
+      iconURL: "https://openai.com/content/images/2022/05/openai-avatar.png",
+    });
 }
 
 function buildEmbedImg(prompt, url) {
@@ -79,6 +88,6 @@ function buildEmbedImg(prompt, url) {
     .setImage(url)
     .setFooter({
       text: "Provided by OpenAI",
-      iconURL: "https://www.openai.com",
-    })
+      iconURL: "https://openai.com/content/images/2022/05/openai-avatar.png",
+    });
 }

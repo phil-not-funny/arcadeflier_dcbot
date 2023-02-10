@@ -49,6 +49,10 @@ if(Botfuncs.getBotConfig("openaiKey")) {
   });
   openai = new OpenAIApi(openaiConfig);
 }
+else 
+{
+  console.error("No OpenAI Key is defined!");
+}
 
 /* -------------------------------- On ready -------------------------------- */
 client.once("ready", async () => {
