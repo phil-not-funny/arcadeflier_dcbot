@@ -1,6 +1,8 @@
 const BotfuncsType = require("dcjs-botfuncs");
 const Discord = require("discord.js");
 
+const modes = ["countries"];
+
 module.exports = {
   name: "arcade",
   /**
@@ -89,18 +91,19 @@ module.exports = {
             "arcade stop`)",
           message
         );
-      if (args[1] === "countries") {
-        Botfuncs.setServerProp(guildId, "gameRunning", "countries");
+      if (args[1] && modes.includes(args[1])) {
+        Botfuncs.setServerProp(guildId, "gameRunning", args[1]);
         Botfuncs.setServerProp(guildId, "gameChannel", message.channelId);
+
+        Botfuncs.sendMessage(
+          '✅  Game initiated of type "' + args[1] + '"',
+          message,
+          0
+        );
+        message.channel.send({
+          embeds: [infoEmbed],
+        });
       }
-      Botfuncs.sendMessage(
-        '✅  Game initiated of type "' + args[1] + '"',
-        message,
-        0
-      );
-      message.channel.send({
-        embeds: [infoEmbed],
-      });
     } else if (args[0] === "info") {
       message.channel.send({ embeds: [infoEmbed] });
     }
