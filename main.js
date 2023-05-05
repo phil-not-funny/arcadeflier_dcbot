@@ -38,7 +38,7 @@ Botfuncs.initServers(serversFile);
 
 const rest = new REST({ version: 10 }).setToken(Botfuncs.getBotConfig("token"));
 
-const countryGames = require("./games/country-game.js");
+const gameStates = require("./games/gameStateManager.js");
 let debugging = Botfuncs.getBotConfig("debug");
 
 let openaiConfig;
@@ -72,7 +72,7 @@ client.once("ready", async () => {
   });
   //client.user.setUsername("Arcade.Flyer");
 
-  countryGames.load();
+  gameStates.load();
 
   if (debugging) {
     let activeGuilds = [];
@@ -141,7 +141,7 @@ client.on("messageReactionAdd", async (reaction) => {
     reaction.message.channelId ===
       Botfuncs.getServerProp(reaction.message.guildId, "gameChannel")
   ) {
-    countryGames.onReaction(
+    gameStates.onReaction(
       reaction,
       reaction.message,
       reaction.message.guildId,
@@ -209,7 +209,7 @@ client.on("messageCreate", (message) => {
     message.channel.id ===
       Botfuncs.getServerProp(message.guildId, "gameChannel")
   )
-    return countryGames.execute(
+    return gameStates.execute(
       message,
       Botfuncs.getMessageCommand(message),
       Botfuncs.getMessageArgs(message),
@@ -524,7 +524,7 @@ function sendMsg(
 client.on("error", (err) => {
   console.log("Error occured");
   console.log("-----STACKTRACE----");
-  console.error(err.name + ": " + err.message);
+  console.error(err);
   client.login(Botfuncs.getBotConfig("token"));
 });
 client.login(Botfuncs.getBotConfig("token"));

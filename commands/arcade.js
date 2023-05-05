@@ -1,7 +1,7 @@
 const BotfuncsType = require("dcjs-botfuncs");
 const Discord = require("discord.js");
 
-const modes = ["countries"];
+const modes = ["countries", "general", "history"];
 
 module.exports = {
   name: "arcade",
