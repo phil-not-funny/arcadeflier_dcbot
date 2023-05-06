@@ -15,6 +15,28 @@ module.exports = {
   private: true,
   execute(message, args, author, guildId, Botfuncs) {
     const prefix = Botfuncs.getServerProp(guildId, "prefix");
+
+    const usageEmbed = new Discord.EmbedBuilder()
+      .setTitle("Arcade command usage")
+      .setColor("DarkRed")
+      .setDescription(
+        "Overview of the arcade command.\n\n**Gamemodes:** _general, countries, history_"
+      )
+      .addFields([
+        {
+          name: `\`${prefix}arcade start <gamemode>\``,
+          value: "Starts the game",
+        },
+        {
+          name: `\`${prefix}arcade stop\``,
+          value: "Stops the game, if not automatically",
+        },
+        {
+          name: `\`${prefix}arcade scoreboard <gamemode>\``,
+          value: "Shows the server scoreboard",
+        },
+      ]);
+
     const infoEmbed = new Discord.EmbedBuilder()
       .setTitle("Info for ARCADE")
       .setColor("DarkRed")
@@ -60,9 +82,9 @@ module.exports = {
         args?.length < 3)
     )
       return Botfuncs.sendMessage(
-        "❌  Wrong commang usage (Maybe " +
+        "❌  Wrong commang usage (Maybe `" +
           Botfuncs.getServerProp(guildId, "prefix") +
-          "usage will help)",
+          "arcade info` will help)",
         message
       );
     else if (args[0] === "stop") {
@@ -81,6 +103,8 @@ module.exports = {
         );
         Botfuncs.setServerProp(guildId, "gameRunning", undefined);
         Botfuncs.setServerProp(guildId, "gameChannel", undefined);
+
+
         return;
       }
     } else if (args[0] === "start") {
@@ -105,7 +129,19 @@ module.exports = {
         });
       }
     } else if (args[0] === "info") {
-      message.channel.send({ embeds: [infoEmbed] });
+      message.channel.send({ embeds: [usageEmbed] });
+    } else if (args[0] === "scoreboard") {
+      const ScoreboardFuncs = new BotfuncsType();
+      ScoreboardFuncs.initServers("../games/scores.json");
+      const scores = ScoreboardFuncs.getServerProp(guildId, args[1]);
+
+      if (!scores)
+        return ScoreboardFuncs.sendMessage(
+          "💢 You have to play a game of _" + args[1] + "_ first",
+          message,
+          5000
+        );
+
     }
   },
 };

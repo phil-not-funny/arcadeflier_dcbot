@@ -15,14 +15,15 @@ module.exports = {
    */
   name: "countries",
   load() {
-    Gamefuncs.initServers("./games/games.json");
+    Gamefuncs.initServers("./games.json");
     fetch(url)
       .then((file) => file.json())
       .then((data) => {
         countries = data;
       });
   },
-  genNew(guildId) {
+
+  genNew(guildId, Gamefuncs) {
     const difficulty = Gamefuncs.getServerProp(guildId, "difficulty");
     let random;
     let alreadyUsed = Gamefuncs.getServerProp(guildId, "alreadyUsed") || [];
@@ -49,6 +50,7 @@ module.exports = {
     Gamefuncs.setServerProp(guildId, "alreadyUsed", alreadyUsed);
     return random;
   },
+
   newQuestion(message, random) {
     let guildId = message.guild.id;
     message.channel.send("3").then((message) => {
@@ -58,12 +60,10 @@ module.exports = {
             message.edit("1").then((message) => {
               setTimeout(() => {
                 message.delete();
-                if (Gamefuncs.getServerProp(guildId, "triviaType") === "typing") {
-                  message.channel.send({
-                    content: "What is the name of this country?",
-                    files: [random.flags.png],
-                  });
-                }
+                message.channel.send({
+                  content: "What is the name of this country?",
+                  files: [random.flags.png],
+                });
               }, 800);
             });
           }, 800);
@@ -111,7 +111,5 @@ module.exports = {
       });
     }
     return correct;
-  }
+  },
 };
-
-

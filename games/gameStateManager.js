@@ -2,12 +2,14 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const BotfuncsType = require("dcjs-botfuncs");
 let Gamefuncs = new BotfuncsType();
+let ScoreboardFuncs = new BotfuncsType();
 
 let gameModes = [];
 
 module.exports = {
   load() {
     Gamefuncs.initServers("./games/games.json");
+    ScoreboardFuncs.initServers("./games/scores.json");
 
     const gameFiles = fs
       .readdirSync("./games")
@@ -52,7 +54,7 @@ module.exports = {
             5000,
             true,
             true,
-            5100
+            5200
           );
         if (command === "arcoptions") {
           if (args[0] === "players") {
@@ -127,17 +129,41 @@ module.exports = {
           }
         } else if (command === "arcbegin") {
           const participants = Gamefuncs.getServerProp(guildId, "participants");
+
           if (!participants)
             return Gamefuncs.sendMessage(
               `❗  You need to set the **participants** first.\n\`${prefix}arcoptions players ...\``,
               message,
               5000
             );
+
           let scoreboard = [];
           participants.forEach((uid) => {
             scoreboard.push({ uid: uid, score: 0 });
           });
+
           Gamefuncs.setServerProp(guildId, "scores", scoreboard);
+
+          if (!ScoreboardFuncs.getServer(guildId))
+            ScoreboardFuncs.addServer(guildId, false, {
+              id: guildId,
+              name: Botfuncs.getServerProp(guildId, "name"),
+              players: scoreboard.map((player) => {
+                return {
+                  uid: player.uid,
+                  gamemodes: [
+                    {
+                      name: gamemode.name,
+                      score: 0,
+                      wins: 0,
+                    },
+                  ],
+                };
+              }),
+            });
+          else {
+            
+          }
 
           Gamefuncs.sendMessage(
             `⚡  Game started!\n\n❗ First to reach a total of ${Gamefuncs.getServerProp(
@@ -147,7 +173,7 @@ module.exports = {
             message,
             0
           );
-          gamemode.newQuestion(message, gamemode.genNew(guildId));
+          gamemode.newQuestion(message, gamemode.genNew(guildId, Gamefuncs));
         } else if (
           command === "skip" &&
           isParticipating(message.author.id, guildId)
@@ -177,7 +203,10 @@ module.exports = {
             Gamefuncs.setServerProp(guildId, "skipRequest", skipRequest);
             if (skipRequest.length === participants.length) {
               Gamefuncs.sendMessage(`✅ Question skipped`, message, 0);
-              gamemode.newQuestion(message, gamemode.genNew(guildId));
+              gamemode.newQuestion(
+                message,
+                gamemode.genNew(guildId, Gamefuncs)
+              );
             }
           }
         }
@@ -194,10 +223,10 @@ module.exports = {
             Gamefuncs.getServerProp(guildId, "current")
           )
         ) {
-          const random = gamemode.genNew(guildId); // instant new random due to latency
+          const random = gamemode.genNew(guildId, Gamefuncs); // instant new random due to latency
           Gamefuncs.setServerProp(guildId, "skipRequest", undefined);
           const author = message.author.id;
-          addScore(author, 1, guildId);
+          addScore(author, 1, guildId, gamemode);
           Gamefuncs.sendMessage(
             "✅ That's correct!\n<@" +
               author +
@@ -210,6 +239,7 @@ module.exports = {
             0,
             true
           );
+
           if (
             getScore(author, guildId) ===
             Gamefuncs.getServerProp(guildId, "goal")
@@ -223,6 +253,18 @@ module.exports = {
               message,
               0
             );
+
+            // add win to server statistics.
+            let loadedPlayers = ScoreboardFuncs.getServerProp(
+              guildId,
+              "players"
+            );
+            loadedPlayers
+              .find((p) => p.uid === author)
+              .gamemodes.find((g) => g.name === gamemode.name).wins += 1;
+            ScoreboardFuncs.setServerProp(guildId, "players", loadedPlayers);
+
+            //remove props and stop game
             removeGameserverProps(guildId);
             return require("../commands/arcade.js").execute(
               message,
@@ -257,12 +299,16 @@ function getScore(uid, guildId) {
   return found;
 }
 
-function addScore(uid, points, guildId) {
+function addScore(uid, points, guildId, gamemode) {
   let scores = Gamefuncs.getServerProp(guildId, "scores");
-  scores.forEach((score) => {
-    if (score.uid === uid) score.score += points;
-  });
+  scores.find((score) => score.uid === uid).score += points;
   Gamefuncs.setServerProp(guildId, "scores", scores);
+
+  let players = ScoreboardFuncs.getServerProp(guildId, "players");
+  players
+    .find((p) => p.uid === uid)
+    .gamemodes.find((g) => g.name === gamemode.name).score += points;
+  ScoreboardFuncs.setServerProp(guildId, "players", players);
 }
 
 function removeGameserverProps(guildId) {
