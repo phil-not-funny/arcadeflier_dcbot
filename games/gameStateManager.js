@@ -145,8 +145,8 @@ module.exports = {
             );
 
           let scoreboard = [];
-          participants.forEach((uid) => {
-            scoreboard.push({ uid: uid, score: 0 });
+          participants.forEach((id) => {
+            scoreboard.push({ uid: id, score: 0 });
           });
 
           Gamefuncs.setServerProp(guildId, "scores", scoreboard);
@@ -275,7 +275,7 @@ module.exports = {
               guildId,
               "players"
             );
-            //loadedPlayers.find((p) => p.uid === author).gamemodes.find((g) => g.name === gamemode.name).wins += 1;
+            loadedPlayers.find((p) => p.uid === author).gamemodes.find((g) => g.name === gamemode.name).wins += 1;
             ScoreboardFuncs.setServerProp(guildId, "players", loadedPlayers);
 
             //remove props and stop game
@@ -319,7 +319,7 @@ function addScore(uid, points, guildId, gamemode) {
   Gamefuncs.setServerProp(guildId, "scores", scores);
 
   let players = ScoreboardFuncs.getServerProp(guildId, "players");
-  //players.find((p) => p.uid === uid).gamemodes.find((g) => g.name === gamemode.name).score += points;
+  players.find((p) => p.uid === uid).gamemodes.find((g) => g.name === gamemode.name).score += points;
   ScoreboardFuncs.setServerProp(guildId, "players", players);
 }
 

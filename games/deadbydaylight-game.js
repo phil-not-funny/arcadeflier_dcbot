@@ -38,7 +38,8 @@ module.exports = {
       name: random.name,
       role: random.role,
       image:
-        "https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/a/a4/IconPerks_" + getImgName(),
+        //"https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/a/a4/iconPerks_" + getImgName(),
+        "C:/Users/deral/personal/Steam/steamapps/common/Dead by Daylight/DeadByDaylight/Content/" + random.image
     });
     alreadyUsed.push(random.modifier);
     Gamefuncs.setServerProp(guildId, "alreadyUsed", alreadyUsed);
