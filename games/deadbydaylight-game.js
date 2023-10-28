@@ -82,7 +82,7 @@ module.exports = {
     }
     return correct;
   },
-  getCurrent() {
+  getCurrent(guildId, Gamefuncs) {
     return Gamefuncs.getServerProp(guildId, "current").name;
   },
 };
