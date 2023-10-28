@@ -31,7 +31,6 @@ module.exports = {
     const gamemode = gameModes.find(
       (game) => game.name === Botfuncs.getServerProp(guildId, "gameRunning")
     );
-
     if (args.length === 0) args = null;
     if (message.channelId === Botfuncs.getServerProp(guildId, "gameChannel")) {
       Gamefuncs.addServer(message.guild, false, {
@@ -42,6 +41,14 @@ module.exports = {
         difficulty: "medium",
         triviaType: "typing",
       });
+      if (
+        message.content.startsWith(prefix) && message.author.id !== Botfuncs.getServerProp(guildId, "gameHoster") &&
+        command !== "skip"
+      )
+        return Gamefuncs.sendMessage(
+          "🚫 Only the host can perform these commands", message, 5000, false, true, 5000
+        );
+
       if (
         (message.content.startsWith(prefix) && command && args) ||
         command === "arcbegin" ||
@@ -162,7 +169,6 @@ module.exports = {
               }),
             });
           else {
-            
           }
 
           Gamefuncs.sendMessage(
@@ -203,10 +209,20 @@ module.exports = {
             Gamefuncs.setServerProp(guildId, "skipRequest", skipRequest);
             if (skipRequest.length === participants.length) {
               Gamefuncs.sendMessage(`✅ Question skipped`, message, 0);
+              Gamefuncs.sendMessage(
+                `The correct answer was: ${gamemode.getCurrent(
+                  message.guild.id,
+                  Gamefuncs
+                )}`,
+                message,
+                0
+              );
               gamemode.newQuestion(
                 message,
-                gamemode.genNew(guildId, Gamefuncs)
+                gamemode.genNew(guildId, Gamefuncs),
+                true
               );
+              Gamefuncs.setServerProp(guildId, "skipRequest", undefined);
             }
           }
         }
@@ -259,9 +275,7 @@ module.exports = {
               guildId,
               "players"
             );
-            loadedPlayers
-              .find((p) => p.uid === author)
-              .gamemodes.find((g) => g.name === gamemode.name).wins += 1;
+            //loadedPlayers.find((p) => p.uid === author).gamemodes.find((g) => g.name === gamemode.name).wins += 1;
             ScoreboardFuncs.setServerProp(guildId, "players", loadedPlayers);
 
             //remove props and stop game
@@ -305,9 +319,7 @@ function addScore(uid, points, guildId, gamemode) {
   Gamefuncs.setServerProp(guildId, "scores", scores);
 
   let players = ScoreboardFuncs.getServerProp(guildId, "players");
-  players
-    .find((p) => p.uid === uid)
-    .gamemodes.find((g) => g.name === gamemode.name).score += points;
+  //players.find((p) => p.uid === uid).gamemodes.find((g) => g.name === gamemode.name).score += points;
   ScoreboardFuncs.setServerProp(guildId, "players", players);
 }
 

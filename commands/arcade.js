@@ -1,7 +1,7 @@
 const BotfuncsType = require("dcjs-botfuncs");
 const Discord = require("discord.js");
 
-const modes = ["countries", "general", "history"];
+const modes = ["countries", "general", "history", "deadbydaylight"];
 
 module.exports = {
   name: "arcade",
@@ -124,6 +124,10 @@ module.exports = {
           message,
           0
         );
+
+        let Gamefuncs = new BotfuncsType();
+        Botfuncs.setServerProp(guildId, "gameHoster", author.id)
+
         message.channel.send({
           embeds: [infoEmbed],
         });

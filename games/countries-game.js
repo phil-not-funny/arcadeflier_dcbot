@@ -52,6 +52,7 @@ module.exports = {
   },
 
   newQuestion(message, random) {
+    
     let guildId = message.guild.id;
     message.channel.send("3").then((message) => {
       setTimeout(() => {
@@ -75,7 +76,7 @@ module.exports = {
    * Checks if the given string equals a country name. Some countries use non-ASCII symbols, which can be difficult to type in for the user.
    * Or maybe the user wants to type in a shortcut version of the country (like "United Arab Emirated" = "UAE").
    * @param {String} string (in most cases) user-input
-   * @param {Object-String} countryName name of the country
+   * @param {Object-String} country name of the country
    * @returns if the input equals the country name
    */
   answerEquals(string, country) {
@@ -112,4 +113,12 @@ module.exports = {
     }
     return correct;
   },
+  /**
+   * 
+   * @param {*} guildId 
+   * @returns 
+   */
+  getCurrent(guildId, Gamefuncs) {
+    return Gamefuncs.getServerProp(guildId, "current").name;
+  }
 };
