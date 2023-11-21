@@ -30,14 +30,17 @@ module.exports = {
     do {
       random = countries[Math.floor(Math.random() * countries.length)];
     } while (
-      (difficulty !== "hard" &&
+      (difficulty !== "extreme" &&
+        !random.ancient &&
+        difficulty !== "hard" &&
         !(
           (difficulty === "easy" &&
             (random.region === "Europe" ||
               random.subregion === "Americas" ||
               random.region === "Asia") &&
-            random.independent === true) ||
-          (difficulty === "medium" && random.independent === true)
+            random.independent &&
+            !random.ancient) ||
+          (difficulty === "medium" && random.independent && random.ancient)
         )) ||
       alreadyUsed.includes(random.alpha3Code)
     );
@@ -52,7 +55,6 @@ module.exports = {
   },
 
   newQuestion(message, random) {
-    
     let guildId = message.guild.id;
     message.channel.send("3").then((message) => {
       setTimeout(() => {
@@ -114,11 +116,11 @@ module.exports = {
     return correct;
   },
   /**
-   * 
-   * @param {*} guildId 
-   * @returns 
+   *
+   * @param {*} guildId
+   * @returns
    */
   getCurrent(guildId, Gamefuncs) {
     return Gamefuncs.getServerProp(guildId, "current").name;
-  }
+  },
 };

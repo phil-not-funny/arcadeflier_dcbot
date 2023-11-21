@@ -20,7 +20,7 @@ module.exports = {
       .setTitle("Arcade command usage")
       .setColor("DarkRed")
       .setDescription(
-        "Overview of the arcade command.\n\n**Gamemodes:** _general, countries, history_"
+        "Overview of the arcade command.\n\n**Gamemodes:** _coutries, deadbydaylight_"
       )
       .addFields([
         {

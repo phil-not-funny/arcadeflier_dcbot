@@ -69,10 +69,7 @@ module.exports = {
   answerEquals(string, answer) {
     let correct = false;
     let altName = answer.name
-      .replace(/ *\([^)]*\) */g, "")
-      .replace(/-/g, " ")
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
+      .replace(/[:-_']/, " ");
 
     if (
       answer.name.toLowerCase() === string.toLowerCase() ||
