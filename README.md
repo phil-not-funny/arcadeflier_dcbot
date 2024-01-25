@@ -1,1 +1,1 @@
-Wos wüst
+"Arcade Flier" All-purpose Discord Bot 
