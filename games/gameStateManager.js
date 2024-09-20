@@ -179,7 +179,7 @@ module.exports = {
             message,
             0
           );
-          gamemode.newQuestion(message, gamemode.genNew(guildId, Gamefuncs));
+          gamemode.newQuestion(message, gamemode.genNew(guildId, Gamefuncs), Gamefuncs);
         } else if (
           command === "skip" &&
           isParticipating(message.author.id, guildId)
@@ -220,7 +220,7 @@ module.exports = {
               gamemode.newQuestion(
                 message,
                 gamemode.genNew(guildId, Gamefuncs),
-                true
+                Gamefuncs
               );
               Gamefuncs.setServerProp(guildId, "skipRequest", undefined);
             }
@@ -288,7 +288,7 @@ module.exports = {
               Botfuncs
             );
           }
-          gamemode.newQuestion(message, random);
+          gamemode.newQuestion(message, random, Gamefuncs);
         }
       }
     }
