@@ -26,8 +26,8 @@ module.exports = {
       );
     const query = args.join(" ");
     if (
-      query.toLowerCase().includes("https://") &&
-      !query.toLowerCase().includes("youtube")
+      query.toLowerCase().includes("https://") && !(
+      query.toLowerCase().includes("youtube") || query.toLowerCase().includes("youtu"))
     )
       return Botfuncs.sendMessage(
         "💢  Unsupported provider",

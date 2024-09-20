@@ -45,9 +45,9 @@ module.exports = {
           interaction.editReply(
             `<@${author.id}>, the answer to "**${content}**" is:\n\`${answer}\``
           );
-        }, 900);
-      }, 900);
-    }, 900);
+        }, 1000);
+      }, 1000);
+    }, 1000);
   },
 };
 

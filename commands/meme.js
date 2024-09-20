@@ -9,7 +9,7 @@ module.exports = {
    */
   execute(message) {
     const Botfuncs = new BotfuncsType();
-    if(!message.channel.nsfw) return Botfuncs.sendMessage(`❌  This command may only be used in an _nsfw channel_`, message)
+    //if(!message.channel.nsfw) return Botfuncs.sendMessage(`❌  This command may only be used in an _nsfw channel_`, message)
     const path = "D:/Aufnahmen/andere Videos/Memes/actual memes";
     fs.readdir(path, null, (err, files) => {
       if (err)

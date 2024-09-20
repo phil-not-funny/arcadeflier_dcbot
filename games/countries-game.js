@@ -20,7 +20,8 @@ module.exports = {
       .then((file) => file.json())
       .then((data) => {
         countries = data;
-      });
+      })
+      .catch((e) => console.log("Error: Countries service unavailable"));
   },
 
   genNew(guildId, Gamefuncs) {

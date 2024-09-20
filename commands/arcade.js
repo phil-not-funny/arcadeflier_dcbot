@@ -104,10 +104,14 @@ module.exports = {
         Botfuncs.setServerProp(guildId, "gameRunning", undefined);
         Botfuncs.setServerProp(guildId, "gameChannel", undefined);
 
-
         return;
       }
     } else if (args[0] === "start") {
+      if (Botfuncs.getBotConfig("gamesDisabled").includes(args[1]))
+        return Botfuncs.sendMessage(
+          "💥 This game is currently unavailable",
+          message
+        );
       if (Botfuncs.getServerProp(guildId, "gameRunning"))
         return Botfuncs.sendMessage(
           "❌  There is already a game running. (End it with `" +
@@ -145,7 +149,6 @@ module.exports = {
           message,
           5000
         );
-
     }
   },
 };
